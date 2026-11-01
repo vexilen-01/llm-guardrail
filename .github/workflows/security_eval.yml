@@ -1,0 +1,42 @@
+name: LLM Security Benchmark & Guardrail Audit
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  security-eval:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Headless Security Audit Script
+        run: |
+          python -c "
+          from src.evaluator import execute_eval_suite
+          import sys
+
+          results = execute_eval_suite('data/owasp_2026_payloads.json')
+          guarded_failures = [r for r in results if r['Guardrail Status'] != 'PASSED (Protected)']
+          
+          pass_rate = ((len(results) - len(guarded_failures)) / len(results)) * 100
+          print(f'Security Evaluation Completed. Protected Pass Rate: {pass_rate:.1f}%')
+
+          if pass_rate < 100.0:
+              print(f'SECURITY BUILD FAILURE: {len(guarded_failures)} probe(s) bypassed guardrails!')
+              sys.exit(1)
+          "
