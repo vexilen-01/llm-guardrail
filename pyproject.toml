@@ -1,6 +1,9 @@
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"
+# Ensure `pytest` and `python -m pytest` both resolve the `src` package,
+# including on CI runners where the console script does not add the cwd.
+pythonpath = ["."]
 
 [tool.ruff]
 line-length = 100
