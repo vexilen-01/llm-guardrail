@@ -10,23 +10,44 @@ An automated security evaluation and defense benchmarking platform for local Lar
 
 ## Quick Start
 
-### 1. Installation
-git clone https://github.com/vexilen-01/llm-guardrail.git  
-cd llm-guardrail  
-python -m venv venv  
-.\venv\Scripts\Activate.ps1  
-pip install -r requirements.txt  
-
+### 1. Clone & Setup Enviornment
+```powershell
+git clone https://github.com/vexilen-01/llm-guardrail.git
+cd llm-guardrail
+```
+### 2. Create and activate Virtual Enviornment
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
+### 3. Install Dependencies
+```powershell
+pip install -r requirements.txt
+```
 ### 2. Run the App
+```powershell
 streamlit run app.py
+```
+## 🗂️ Repository Structure
 
-## Repository Structure
-- app.py: Streamlit web interface
-- src/evaluator.py: Dual-path evaluation engine
-- src/guardrails.py: Regex input & output token filters
-- src/multi_turn.py: Context-drift test evaluator
-- data/test_payloads.json: Adversarial test suite
-- .github/workflows/security_eval.yml: CI/CD workflow
-
+```text
+llm-guardrail/
+├── .github/
+│   └── workflows/
+│       └── security_eval.yml     # Automated CI/CD security pipeline
+├── .streamlit/
+│   └── config.toml               # Custom cyber dark visual theme
+├── data/
+│   ├── test_payloads.json        # Core red-teaming test suite
+│   └── owasp_2026_payloads.json  # OWASP LLM 2026 threat benchmark payloads
+├── src/
+│   ├── __init__.py               # Package initializer
+│   ├── evaluator.py              # Dual-path evaluation engine & CI fallback
+│   ├── guardrails.py             # Heuristic regex input & token output filters
+│   └── multi_turn.py             # Multi-turn context-drift evaluator logic
+├── app.py                        # Interactive Streamlit dashboard application
+├── requirements.txt              # Project dependencies
+└── README.md                     # Documentation
+```
 ## License
 MIT License
